@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13
+    container_name: data_catalog_db
+    environment:
+      POSTGRES_USER: dbadministrator
+      POSTGRES_PASSWORD: dbpassword
+      POSTGRES_DB: data_catalog
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    container_name: data_catalog_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgresql://dbadministrator:dbpassword@db:5432/data_catalog?schema=public
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  postgres_data:
