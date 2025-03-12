@@ -1,17 +1,22 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma';
+import { plainToInstance } from 'class-transformer';
+import { CreatePropertyDto, UpdatePropertyDto } from '../dto/PropertyDtos';
+import { validate } from 'class-validator';
 
-// Create a new property
 export const createProperty = async (req: Request, res: Response): Promise<void> => {
-  const { name, type, description } = req.body;
+  console.log("updated property file");
+  const createPropertyDto = plainToInstance(CreatePropertyDto, req.body);
+  const errors = await validate(createPropertyDto);
+
+  if (errors.length > 0) {
+    res.status(400).json({ errors });
+    return;
+  }
 
   try {
     const property = await prisma.property.create({
-      data: {
-        name,
-        type,
-        description,
-      },
+      data: createPropertyDto,
     });
     res.status(201).json(property);
   } catch (error) {
@@ -19,6 +24,7 @@ export const createProperty = async (req: Request, res: Response): Promise<void>
     res.status(400).json({ error: 'Failed to create property' });
   }
 };
+
 
 // Get all properties
 export const getProperties = async (req: Request, res: Response): Promise<void> => {
@@ -55,21 +61,30 @@ export const getPropertyById = async (req: Request, res: Response): Promise<void
 // Update a property
 export const updateProperty = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { name, type, description } = req.body;
+
+  const updatePropertyDto = plainToInstance(UpdatePropertyDto, req.body);
+  const errors = await validate(updatePropertyDto);
+
+  if (errors.length > 0) {
+    const formattedErrors = errors.map(err => ({
+      field: err.property,
+      message: Object.values(err.constraints || {}).join(', '),
+    }));
+    res.status(400).json({ errors: formattedErrors });
+    // res.status(400).json({ errors });
+    // return;
+  }
 
   try {
     const property = await prisma.property.update({
       where: { id: parseInt(id) },
-      data: {
-        name,
-        type,
-        description,
-      },
+      data: updatePropertyDto,
     });
     res.status(200).json(property);
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: 'Failed to update property' });
+    
   }
 };
 
