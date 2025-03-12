@@ -134,7 +134,8 @@ Property
 ├── description
 ├── createdAt
 ├── updatedAt
-└── events (one-to-many with EventProperty)```
+└── events (one-to-many with EventProperty) 
+```
 
 **API Design**
 --------------
