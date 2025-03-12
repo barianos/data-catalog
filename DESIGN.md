@@ -84,9 +84,57 @@ The database schema consists of the following entities and their relationships:
 
 ### **2\. Schema Diagram**
 
-plaintextCopy
+```plaintext
+TrackingPlan
+├── id
+├── name
+├── description
+├── createdAt
+├── updatedAt
+└── events (one-to-many with TrackingPlanEvent)
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   TrackingPlan  ├── id  ├── name  ├── description  ├── createdAt  ├── updatedAt  └── events (one-to-many with TrackingPlanEvent)  TrackingPlanEvent  ├── id  ├── trackingPlanId  ├── eventId  ├── additionalProperties  ├── trackingPlan (many-to-one with TrackingPlan)  ├── event (many-to-one with Event)  └── properties (one-to-many with TrackingPlanEventProperty)  TrackingPlanEventProperty  ├── id  ├── trackingPlanEventId  ├── propertyId  ├── required  ├── trackingPlanEvent (many-to-one with TrackingPlanEvent)  └── property (many-to-one with Property)  Event  ├── id  ├── name  ├── type  ├── description  ├── createdAt  ├── updatedAt  └── properties (one-to-many with EventProperty)  EventProperty  ├── id  ├── eventId  ├── propertyId  ├── required  ├── event (many-to-one with Event)  └── property (many-to-one with Property)  Property  ├── id  ├── name  ├── type  ├── description  ├── createdAt  ├── updatedAt  └── events (one-to-many with EventProperty)   `
+TrackingPlanEvent
+├── id
+├── trackingPlanId
+├── eventId
+├── additionalProperties
+├── trackingPlan (many-to-one with TrackingPlan)
+├── event (many-to-one with Event)
+└── properties (one-to-many with TrackingPlanEventProperty)
+
+TrackingPlanEventProperty
+├── id
+├── trackingPlanEventId
+├── propertyId
+├── required
+├── trackingPlanEvent (many-to-one with TrackingPlanEvent)
+└── property (many-to-one with Property)
+
+Event
+├── id
+├── name
+├── type
+├── description
+├── createdAt
+├── updatedAt
+└── properties (one-to-many with EventProperty)
+
+EventProperty
+├── id
+├── eventId
+├── propertyId
+├── required
+├── event (many-to-one with Event)
+└── property (many-to-one with Property)
+
+Property
+├── id
+├── name
+├── type
+├── description
+├── createdAt
+├── updatedAt
+└── events (one-to-many with EventProperty)```
 
 **API Design**
 --------------
