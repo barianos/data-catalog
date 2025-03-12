@@ -21,3 +21,6 @@ This project is a RESTful API for managing Events, Properties, and Tracking Plan
 
 ## Design Decisions
 See [Design Decisions Documentation](./DESIGN.md)
+
+## AI assistance
+Deep seek was used during the implementation of this project in various ways. It was consulted for design decisions, it was used to generate the docker, prisma and typescript configurations. It was also used for advice on overcoming errors and contributed codeblocks as part of that procedure.
