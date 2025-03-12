@@ -1,4 +1,4 @@
-//Setting provided by DeepSeek AI
+//Settings provided by DeepSeek AI
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -8,7 +8,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "express"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

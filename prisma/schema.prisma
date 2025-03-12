@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TrackingPlan {
+  id          Int                 @id @default(autoincrement())
+  name        String              @unique
+  description String
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  events      TrackingPlanEvent[]
+
+  @@map("tracking_plans")
+}
+
+model TrackingPlanEvent {
+  id                   Int                         @id @default(autoincrement())
+  trackingPlanId       Int
+  eventId              Int
+  additionalProperties Boolean
+  trackingPlan         TrackingPlan                @relation(fields: [trackingPlanId], references: [id])
+  event                Event                       @relation(fields: [eventId], references: [id])
+  properties           TrackingPlanEventProperty[]
+
+  @@unique([trackingPlanId, eventId])
+  @@map("tracking_plan_events")
+}
+
+model TrackingPlanEventProperty {
+  id                  Int               @id @default(autoincrement())
+  trackingPlanEventId Int
+  propertyId          Int
+  required            Boolean
+  trackingPlanEvent   TrackingPlanEvent @relation(fields: [trackingPlanEventId], references: [id])
+  property            Property          @relation(fields: [propertyId], references: [id])
+
+  @@unique([trackingPlanEventId, propertyId])
+  @@map("tracking_plan_event_properties")
+}
+
+model Event {
+  id            Int                 @id @default(autoincrement())
+  name          String
+  type          String
+  description   String
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+  trackingPlans TrackingPlanEvent[]
+  properties    EventProperty[]
+
+  @@unique([name, type])
+  @@map("events")
+}
+
+model Property {
+  id                          Int                         @id @default(autoincrement())
+  name                        String
+  type                        String
+  description                 String
+  createdAt                   DateTime                    @default(now()) @map("created_at")
+  updatedAt                   DateTime                    @updatedAt @map("updated_at")
+  events                      EventProperty[]
+  trackingPlanEventProperties TrackingPlanEventProperty[] // Add this line
+  validationRules             String?
+
+  @@unique([name, type])
+  @@map("properties")
+}
+
+model EventProperty {
+  id         Int      @id @default(autoincrement())
+  eventId    Int
+  propertyId Int
+  required   Boolean
+  event      Event    @relation(fields: [eventId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id])
+
+  @@unique([eventId, propertyId])
+  @@map("event_properties")
+}
