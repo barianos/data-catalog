@@ -16,8 +16,10 @@ This project is a RESTful API for managing Events, Properties, and Tracking Plan
 ## API Documentation (not implemented yet)
 
 ## Testing (not implemented yet)
+- Start the docker environment `docker-compose up --build`
+- Enter the api container `docker exec -it data_catalog_api bash`
 - Run unit tests: `npm test`.
-- Run integration tests: `npm run test:integration`.
+(Some tests fail and I did not have the time to locate the issues and fix them)
 
 ## Design Decisions
 See [Design Decisions Documentation](./DESIGN.md)

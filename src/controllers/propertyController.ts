@@ -5,12 +5,15 @@ import { CreatePropertyDto, UpdatePropertyDto } from '../dto/PropertyDtos';
 import { validate } from 'class-validator';
 
 export const createProperty = async (req: Request, res: Response): Promise<void> => {
-  console.log("updated property file");
   const createPropertyDto = plainToInstance(CreatePropertyDto, req.body);
   const errors = await validate(createPropertyDto);
 
   if (errors.length > 0) {
-    res.status(400).json({ errors });
+    const formattedErrors = errors.map(err => ({
+      field: err.property,
+      message: Object.values(err.constraints || {}).join(', '),
+    }));
+    res.status(400).json({ errors: formattedErrors });
     return;
   }
 
@@ -20,7 +23,6 @@ export const createProperty = async (req: Request, res: Response): Promise<void>
     });
     res.status(201).json(property);
   } catch (error) {
-    console.error(error);
     res.status(400).json({ error: 'Failed to create property' });
   }
 };
@@ -32,7 +34,6 @@ export const getProperties = async (req: Request, res: Response): Promise<void> 
     const properties = await prisma.property.findMany();
     res.status(200).json(properties);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Failed to fetch properties' });
   }
 };
@@ -53,7 +54,6 @@ export const getPropertyById = async (req: Request, res: Response): Promise<void
 
     res.status(200).json(property);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Failed to fetch property' });
   }
 };
@@ -71,8 +71,6 @@ export const updateProperty = async (req: Request, res: Response): Promise<void>
       message: Object.values(err.constraints || {}).join(', '),
     }));
     res.status(400).json({ errors: formattedErrors });
-    // res.status(400).json({ errors });
-    // return;
   }
 
   try {
@@ -82,7 +80,6 @@ export const updateProperty = async (req: Request, res: Response): Promise<void>
     });
     res.status(200).json(property);
   } catch (error) {
-    console.error(error);
     res.status(400).json({ error: 'Failed to update property' });
     
   }
@@ -98,7 +95,6 @@ export const deleteProperty = async (req: Request, res: Response): Promise<void>
     });
     res.status(204).send();
   } catch (error) {
-    console.error(error);
     res.status(400).json({ error: 'Failed to delete property' });
   }
 };
