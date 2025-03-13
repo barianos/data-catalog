@@ -13,13 +13,15 @@ This project is a RESTful API for managing Events, Properties, and Tracking Plan
 2. Set up environment variables (see `.env`).
 3. Run the application: `docker-compose up --build`.
 
-## API Documentation (not implemented yet)
+## API Documentation
+An overview of endpoints is available in [Design Decisions Documentation](./DESIGN.md)
+A swagger Documentation would be a future improvement.
 
-## Testing (not implemented yet)
+## Testing
 - Start the docker environment `docker-compose up --build`
 - Enter the api container `docker exec -it data_catalog_api bash`
 - Run unit tests: `npm test`.
-(Some tests fail and I did not have the time to locate the issues and fix them)
+    (Some tests fail and I did not have the time to locate the issues and fix them)
 
 ## Design Decisions
 See [Design Decisions Documentation](./DESIGN.md)
